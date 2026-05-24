@@ -32,6 +32,7 @@ app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/gallery', require('./routes/galleryRoutes'));
 app.use('/api/about', require('./routes/aboutRoutes'));
 app.use('/api/settings', require('./routes/settingsRoutes'));
+app.use('/api/newsletter', require('./routes/newsletterRoutes'));
 
 // Temporary debug route for email testing
 app.get('/api/debug/test-mail', async (req, res) => {
