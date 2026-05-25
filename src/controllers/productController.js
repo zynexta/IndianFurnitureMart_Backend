@@ -100,6 +100,7 @@ exports.createProduct = async (req, res, next) => {
             isIconic, 
             isFeatured,
             isBulkPricingAvailable,
+            showPrice,
             homePriority 
         } = req.body;
         
@@ -150,6 +151,7 @@ exports.createProduct = async (req, res, next) => {
             isIconic: isIconic === 'true' || isIconic === true,
             isFeatured: isFeatured === 'true' || isFeatured === true,
             isBulkPricingAvailable: isBulkPricingAvailable === 'true' || isBulkPricingAvailable === true,
+            showPrice: showPrice === undefined ? true : (showPrice === 'true' || showPrice === true),
             homePriority: Number(homePriority) || 0
         });
 
@@ -175,6 +177,7 @@ exports.updateProduct = async (req, res, next) => {
             isIconic, 
             isFeatured,
             isBulkPricingAvailable,
+            showPrice,
             homePriority 
         } = req.body;
         
@@ -210,6 +213,7 @@ exports.updateProduct = async (req, res, next) => {
             product.isIconic = isIconic !== undefined ? (isIconic === 'true' || isIconic === true) : product.isIconic;
             product.isFeatured = isFeatured !== undefined ? (isFeatured === 'true' || isFeatured === true) : product.isFeatured;
             product.isBulkPricingAvailable = isBulkPricingAvailable !== undefined ? (isBulkPricingAvailable === 'true' || isBulkPricingAvailable === true) : product.isBulkPricingAvailable;
+            product.showPrice = showPrice !== undefined ? (showPrice === 'true' || showPrice === true) : product.showPrice;
             product.homePriority = homePriority !== undefined ? Number(homePriority) : product.homePriority;
 
             let finalImages = [...product.images];

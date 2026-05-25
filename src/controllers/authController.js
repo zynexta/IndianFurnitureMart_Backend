@@ -116,7 +116,7 @@ exports.loginUser = async (req, res) => {
     email = email?.trim()?.toLowerCase();
     try {
         const user = await User.findOne({ email });
-        if (user && user.provider === 'local' && (await user.comparePassword(password))) {
+        if (user && (await user.comparePassword(password))) {
             if (user.isBlocked) {
                 return res.status(403).json({ message: 'Your account has been blocked. Please contact admin.' });
             }
@@ -141,9 +141,12 @@ exports.loginUser = async (req, res) => {
                 provider: user.provider,
                 token: generateToken(user._id),
             });
-        } else if (user && user.provider !== 'local') {
-            res.status(400).json({ message: `This account is registered via ${user.provider}. Please use that method.` });
         } else {
+            if (user && user.provider === 'google') {
+                return res.status(401).json({ 
+                    message: 'Invalid password. If you originally signed up with Google, please use Google Login or reset your password to set a custom password.' 
+                });
+            }
             res.status(401).json({ message: 'Invalid email or password' });
         }
     } catch (error) {
@@ -177,10 +180,6 @@ exports.forgotPassword = async (req, res) => {
         const user = await User.findOne({ email: email?.trim()?.toLowerCase() });
         if (!user) {
             return res.status(404).json({ message: 'No account found with this email address' });
-        }
-
-        if (user.provider !== 'local') {
-            return res.status(400).json({ message: `This account is registered via ${user.provider}. Please use that method.` });
         }
 
         // Generate 6-digit OTP
